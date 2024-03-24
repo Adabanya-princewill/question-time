@@ -4,6 +4,7 @@ import axios from './lib/axios';
 import QuestionList from './components/QuestionList';
 import QuestionForm from './components/QuestionForm';
 import Header from './components/Header';
+import Loading from './loading'
 
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +12,7 @@ const IndexPage = () => {
   const [questions, setQuestions] = useState({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,9 +40,11 @@ const IndexPage = () => {
     } catch (error) {
       setError('Error fetching questions');
       console.error('Error fetching questions:', error);
+    } finally {
+      setLoading(false); 
     }
   };
-  
+
   const handleRemoveQuestion = async (id) => {
     try {
       await axios.delete(`/questions/${id}`, {
@@ -55,9 +59,13 @@ const IndexPage = () => {
       console.error('Error removing question:', error);
     }
   };
-  
 
   const handleOptionRemove = (questionId, optionIndex) => {
+    const updatedQuestion = { ...questions[questionId] };
+    updatedQuestion.options.splice(optionIndex, 1);
+    setQuestions({ ...questions, [questionId]: updatedQuestion });
+  };
+  const handleQuestionRemove = (questionId, optionIndex) => {
     const updatedQuestion = { ...questions[questionId] };
     updatedQuestion.options.splice(optionIndex, 1);
     setQuestions({ ...questions, [questionId]: updatedQuestion });
@@ -70,12 +78,12 @@ const IndexPage = () => {
       return updatedQuestions;
     });
   };
-  
-  
 
   return (
     <div>
-      {error ? (
+      {loading ? (
+        <Loading />
+      ) : error ? (
         <p>{error}</p>
       ) : (
         <div className='w-full px-2 py-2 max-w-6xl mx-auto'>
@@ -84,6 +92,7 @@ const IndexPage = () => {
             questions={questions}
             handleRemoveQuestion={handleRemoveQuestion}
             onOptionRemove={handleOptionRemove}
+           onQuestionRemove={handleQuestionRemove}
             setQuestions={setQuestions}
             fetchQuestions={fetchQuestions}
             onOptionChange={handleOptionChange}

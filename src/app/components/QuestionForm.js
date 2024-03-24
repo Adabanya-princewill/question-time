@@ -49,21 +49,24 @@ const QuestionForm = ({ questionData, setShowAddModal, showAddModal, fetchQuesti
       question,
       options: options
     };
-    let response; 
+    let response;
     try {
-  
+
       if (questionId) {
         response = await axios.put(`/questions/${questionId}`, payload, { headers: { Token: token } });
       } else {
         response = await axios.post('/questions', payload, { headers: { Token: token } });
       }
       setShowAddModal(false);
+      setQuestion('');
+      setOptions(['', '', '']);
+      setQuestionId('');
       fetchQuestions(localStorage.getItem('token'));
     } catch (error) {
       console.error('Error submitting question:', error);
     }
   };
-  
+
 
   const handleDelete = async (questionId) => {
     if (questionId) {
@@ -89,7 +92,7 @@ const QuestionForm = ({ questionData, setShowAddModal, showAddModal, fetchQuesti
         <form onSubmit={handleSubmit} ref={modalRef} className='modal'>
           <h1 className='py-2'>{questionId ? 'Edit Question' : 'Add New Question'}</h1>
           <input
-          required
+            required
             type="text"
             placeholder="Enter question"
             value={question}
@@ -103,7 +106,7 @@ const QuestionForm = ({ questionData, setShowAddModal, showAddModal, fetchQuesti
                 Add Option
               </button>
             )}
-            <button className='border text-white bg-green-600 text-sm rounded-md px-4 py-1' type="submit">{questionId ? 'Update' : 'Submit'}</button>
+            <button className='border text-white bg-green-600 text-sm rounded-md px-4 py-1' type="submit">Submit</button>
             {questionId && (
               <button type="button" className='border text-sm text-white bg-red-600 rounded-md px-4 py-1' onClick={() => handleDelete(questionId)}>
                 Delete
