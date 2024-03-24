@@ -9,11 +9,11 @@ const EditModal = ({ setIsEditModal, questionEntries, handleCancelEdit, selected
 
     const [id, question] = selectedQuestion;
     return (
-        <div className='modal-overlay'>
-            <div className='modal'>
-                <ul className='flex flex-wrap gap-2 justify-center lg:justify-start lg:items-start'>
+        <div className=''>
+            <div className='modal-overlay'>
+                <ul className='flex modal flex-wrap gap-2 justify-center lg:justify-start lg:items-start'>
 
-                    <li key={id} className='p-4 bg-blue-100 rounded-md'>
+                    <li key={id} className='rounded-lg'>
                         <div className='question--card'>
                             <div className='question--options'>
                                 <div className='text-xl font-semibold'>{question.question}</div>
@@ -30,10 +30,12 @@ const EditModal = ({ setIsEditModal, questionEntries, handleCancelEdit, selected
                                             value={editingValue}
                                             onClick={() => handleEditOption(id, index)}
                                             onChange={(e) => setEditingValue(e.target.value)}
-                                            className="border-none mr-1 p-1 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                                            className="border border-blue-600 w-full mr-1 p-2 rounded-md focus:outline-none focus:border-green-600 caret-blue-600"
                                         />
-                                        <button className="bg-green-600 rounded-md px-2 text-white" onClick={() => handleSaveOption(id, index)}>Save</button>
-                                        <button className="bg-red-600 rounded-md px-2 ml-1 text-white" onClick={handleCancelEdit}>cancel</button>
+                                        <div className='my-2'>
+                                            <button className="bg-green-600 rounded-md px-2 text-white" onClick={() => handleSaveOption(id, index)}>Save</button>
+                                            <button className="bg-red-600 rounded-md px-2 ml-1 text-white" onClick={handleCancelEdit}>cancel</button>
+                                        </div>
                                     </>
                                 ) : (
                                     <div className='question--options'>
